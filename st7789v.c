@@ -38,66 +38,23 @@ void st7789_Init(void) {
     //* Initialization sequence
     const st7789_command_t initSequence[] = {
         // Sleep
-        {ST7789_CMD_SLPIN, 10, 0, NULL},                    // Sleep
-        {ST7789_CMD_SWRESET, 200, 0, NULL},                 // Reset
-        {ST7789_CMD_SLPOUT, 120, 0, NULL},                  // Sleep out
+        {ST7789_CMD_SWRESET, 150, 0, NULL},                 // Reset
+        {ST7789_CMD_SLPOUT, 10, 0, NULL},                  // Sleep out
 
-        {ST7789_CMD_CMD2EN, 100, 0, NULL},
-
+        {ST7789_CMD_COLMOD, 10, 1, ( uint8_t *)"\x55"},      // 16 bit RGB mode
         {ST7789_CMD_MADCTL, 0, 1, ( uint8_t *)"\x00"},      // Page / column address order
-        {ST7789_CMD_COLMOD, 0, 1, ( uint8_t *)"\x55"},      // 16 bit RGB mode
 
-        // //* ADD vsync, hsync
-        // {ST7789_CMD_RGBCTRL, 0, 3, (uint8_t *)"\x42\x08\x3c"},
-
-        {ST7789_CMD_INVON, 0, 0, NULL},                     // Inversion on
         {ST7789_CMD_CASET, 0, 4, ( uint8_t *)caset},        // Set width
         {ST7789_CMD_RASET, 0, 4, ( uint8_t *)raset},        // Set height
-
-        // Porch setting
-        {ST7789_CMD_PORCTRL, 0, 5, ( uint8_t *)"\x0c\x0c\x00\x33\x33"},
-        // Set VGH to 12.54V and VGL to -9.6V
-        {ST7789_CMD_GCTRL, 0, 1, ( uint8_t *)"\x35"},
-        // Set VCOM to 1.475V
-        {ST7789_CMD_VCOMS, 0, 1, ( uint8_t *)"\x1f"},
-        // Enable VDV/VRH control
-        {ST7789_CMD_VDVVRHEN, 0, 1, ( uint8_t *)"\x01"},
-
-        // LCM control
-        {ST7789_CMD_LCMCTRL, 0, 1, ( uint8_t *)"\x2c"},
-        // VAP(GVDD) = 4.45+(vcom+vcom offset+vdv)
-        {ST7789_CMD_VRHS, 0, 1, ( uint8_t *)"\x12"},
-        // VDV = 0V
-        {ST7789_CMD_VDVSET, 0, 1, ( uint8_t *)"\x20"},
-        // AVDD=6.8V, AVCL=-4.8V, VDDS=2.3V
-        {ST7789_CMD_PWCTRL1, 0, 2, ( uint8_t *)"\xa4\xa1"},
-        //  60 fps
-        {ST7789_CMD_FRCTR2, 0, 1, ( uint8_t *)"\x0f"},
-        // Gama 2.2
-        {ST7789_CMD_GAMSET, 0, 1, (uint8_t *)"\x01"},
-        // Gama curve
-        {ST7789_CMD_PVGAMCTRL, 0, 14, ( uint8_t *)"\xd0\x08\x11\x08\x0c\x15\x39\x33\x50\x36\x13\x14\x29\x2d"},
-        {ST7789_CMD_NVGAMCTRL, 0, 14, ( uint8_t *)"\xd0\x08\x10\x08\x06\x06\x39\x44\x51\x0b\x16\x14\x2f\x31"},
-        
-        {ST7789_CMDLIST_END, 0, 0, NULL}                   // End of commands
+        {ST7789_CMD_INVON, 10, 0, NULL},                     // Inversion on
+        {ST7789_CMD_NORON, 10, 0, NULL},                      // Normal display on
+        {ST7789_CMD_DISPON, 10, 0, NULL},                      // Display on
+        {ST7789_CMDLIST_END, 0, 0, NULL},                      // Display on
     };
 
     st7789_RunCommands(initSequence);
 
-    LCD_IO_Delay(10);
     st7789_Clear(ST7789_BLACK);
-
-    const st7789_command_t initSequence2[] = {
-        {ST7789_CMD_RGBCTRL, 0, 3, (uint8_t *)"\x42\x08\x3c"},  // HSYNC = 0x3C, VSYNC = 0x80
-        {ST7789_CMD_RAMCTRL, 0, 2, (uint8_t*)"\x11\xc2"},       // RAMCTRL Select RGB interface
-        {ST7789_CMD_DISPON, 100, 0, NULL},                      // Display on
-        {ST7789_CMD_SLPOUT, 100, 0, NULL},                      // Sleep out
-        
-        {ST7789_CMD_RAMWR, 50, 0, NULL},                        // Begin GRAM write
-        {ST7789_CMDLIST_END, 0, 0, NULL},                       // End of commands
-    };
-
-    st7789_RunCommands(initSequence2);
 }
 
 void st7789_Reset(void) {

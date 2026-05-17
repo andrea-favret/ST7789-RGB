@@ -27,8 +27,12 @@
  * @brief ST7789V Dimensions
  * 
  */
-#define ST7789_LCD_WIDTH             240
-#define ST7789_LCD_HEIGHT            320
+#ifndef ST7789_LCD_WIDTH
+    #define ST7789_LCD_WIDTH             240
+#endif
+#ifndef ST7789_LCD_HEIGHT
+    #define ST7789_LCD_HEIGHT            320
+#endif
 
 /**
  * @brief ST7789V Command Table 1
